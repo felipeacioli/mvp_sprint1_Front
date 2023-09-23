@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <title>MVP - Sprint I</title>
+</head>
+
+<body>
+     <!-- Cabeçalho de informações do sistema -->
+    <header>
+        <div class="title">
+            <h2>Controle de Estoque</h2>
+        </div>
+        <div class="banner">
+            <img src= "https://encurtador.com.br/DELTV"      
+            alt="y">
+        </div>
+    </header>
+
+     <!-- Opções para adicionar um novo item -->
+    <section class="newItem">
+        <input type="text" id="newDescricao" placeholder="Adicionar novo material:">
+        <input type="text" id="newGrupo" placeholder="Grupo:">
+        <input type="text" id="newQuantidade" placeholder="Quantidade:">
+        <button onclick="newItem()" class="addBtn" >Adicionar</button>
+    </section>
+
+    <!-- Tabela com items existentes -->
+    <section class="items">
+        <table id="myTable">
+            <tr>
+                <th>Descrição</th>
+                <th>Grupo</th>
+                <th>Quantidade</th>
+                <th><img src="https://cdn-icons-png.flaticon.com/512/126/126468.png" width="15px" height="15px"></th>
+            </tr>
+        </table>
+    </section>
+    
+     <!-- Rodapé com informações do setor -->
+
+    <footer>
+        <ul class="post_content">
+
+            <h2>Informações do Setor</h2>
+            
+            <li>
+                <info>Setor: manutenção</info>
+            </li>
+            <li>
+                <info>Local: almoxarifado - sul</li>
+            </li>
+            <li>
+                <info>Email do responsável: evaristo.acioli@icloud.com</li>
+            </li>
+        
+        </ul>
+
+    </footer>
+    <script src="scripts.js"></script>
+</body>
+
+</html>
+
+
