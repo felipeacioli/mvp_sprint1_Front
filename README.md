@@ -2,7 +2,7 @@
 
 Front-End do projeto MVP da Disciplina de Desenvolvimento Full Stack Básico da PUC-RIO. 
 
-Single page application (SPA) que tem o objetivo de gerenciar o estoque de um almoxarifado. 
+Single page application (SPA) que tem por objetivo gerenciar o estoque de um almoxarifado. 
 
 ---
 ## Como executar
