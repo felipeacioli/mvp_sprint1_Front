@@ -11,13 +11,38 @@ const getList = async () => {
   })
     .then((response) => response.json())
     .then((data) => {    
-    data.materiais.forEach(item => insertList(item.descricao, item.grupo, item.quantidade))
+    data.materiais.forEach(item => insertList(item.descricao, item.grupo, item.quantidade, item.preco))
     }))
     .catch((error) => {
       console.error('Error:', error);
     });
 }
 
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para obter a cotação do dolar através de API externa via requisição GET
+  --------------------------------------------------------------------------------------
+*/
+
+const getUSDExchangeRate = async () => {
+  let apiKey = "ec91dba71503e226d37905fc";
+  let url = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    const usdRate = data.conversion_rates.BRL;
+    return usdRate;
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
+};
 /*
   --------------------------------------------------------------------------------------
   Chamada da função para carregamento inicial dos dados
@@ -25,17 +50,33 @@ const getList = async () => {
 */
 getList()
 
+/*
+  --------------------------------------------------------------------------------------
+  Chamada da função para carregamento da cotação do dolar,.
+  --------------------------------------------------------------------------------------
+*/
+
+let cotacaoPromise = getUSDExchangeRate();
+cotacaoPromise
+  .then((cotacao) => {
+    let h2Element = document.getElementById("dolarCotation");
+    h2Element.textContent = `Cotação do dólar: R$ ${cotacao.toFixed(3)}`; // Aqui você imprime o valor da cotação do dólar
+  })
+  .catch((error) => {
+    console.error("Erro ao obter taxa de câmbio do USD:", error);
+  });
 
 /*
   --------------------------------------------------------------------------------------
   Função para colocar um item na lista do servidor via requisição POST
   --------------------------------------------------------------------------------------
 */
-const postItem = async (inputDescricao, inputGrupo, InputQuantidade) => {
+const postItem = async (inputDescricao, inputGrupo, inputQuantidade, inputPreco) => {
   const formData = new FormData();
   formData.append('descricao', inputDescricao);
   formData.append('grupo', inputGrupo);
-  formData.append('quantidade', InputQuantidade);
+  formData.append('quantidade', inputQuantidade);
+  formData.append('preco', inputPreco);
 
   let url = 'http://127.0.0.1:5000/material';
   fetch(url, {
@@ -111,14 +152,17 @@ const newItem = () => {
   let inputDescricao = document.getElementById("newDescricao").value;
   let inputGrupo = document.getElementById("newGrupo").value;
   let inputQuantidade = document.getElementById("newQuantidade").value;
+  let inputPreco = document.getElementById("newPreco").value;
 
   if (inputDescricao === '') {
     alert("Descreva o material!");
   } else if (isNaN(inputQuantidade)) {
-    alert("Quantidade precisa ser número!");
+    alert("Quantidade precisa ser um número!");
+  } else if (isNaN(inputPreco)) {
+    alert("Preço precisa ser um número!");
   } else {
-    insertList(inputDescricao, inputGrupo, inputQuantidade)
-    postItem(inputDescricao, inputGrupo, inputQuantidade)
+    insertList(inputDescricao, inputGrupo, inputQuantidade, inputPreco)
+    postItem(inputDescricao, inputGrupo, inputQuantidade, inputPreco)
     alert("Material adicionado!")
   }
 }
@@ -128,8 +172,8 @@ const newItem = () => {
   Função para inserir items na lista apresentada
   --------------------------------------------------------------------------------------
 */
-const insertList = (description, group, quantity) => {
-  var item = [description, group, quantity]
+const insertList = (description, group, quantity, price) => {
+  var item = [description, group, quantity, price]
   console.log(item)
   var table = document.getElementById('myTable');
   var row = table.insertRow();
@@ -142,6 +186,6 @@ const insertList = (description, group, quantity) => {
   document.getElementById("newDescricao").value ="";
   document.getElementById("newGrupo").value ="";
   document.getElementById("newQuantidade").value ="";
-
+  document.getElementById("newPreco").value ="";
   removeElement()
 }
